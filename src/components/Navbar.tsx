@@ -1,7 +1,17 @@
+import { LogoutUser } from "@/actions/auth";
+import { useUser } from "@/context/userContext";
 import { MapPin } from "lucide-react";
-import React from "react";
+import { useRouter } from "next/navigation";
+
 
 const Navbar = () => {
+  const router = useRouter();
+  const { user } = useUser();
+
+  const logoutHandler = async () => {
+    await LogoutUser();
+    router.push("/auth/login");
+  };
   return (
     <nav
       className="
@@ -27,7 +37,23 @@ const Navbar = () => {
         <li className="text-lg text-gray-600">Map</li>
         <li className="text-lg text-gray-600">Blogs</li>
         <li className="text-[18px] ">
-          <button title="button" className="bg-blue-800 p-2 px-4 rounded-lg text-white font-normal">Login</button>
+          {user ? (
+            <button
+              title="button"
+              className="bg-blue-800 p-2 px-4 rounded-lg text-white font-normal"
+              onClick={logoutHandler}
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              title="button"
+              className="bg-blue-800 p-2 px-4 rounded-lg text-white font-normal"
+              onClick={() => router.push("/auth/login")}
+            >
+              Volunter Login
+            </button>
+          )}
         </li>
       </ul>
     </nav>
