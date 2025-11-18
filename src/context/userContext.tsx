@@ -13,6 +13,7 @@ type User = {
 type UserContextType = {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  loading: boolean;
   fetchUserData: () => Promise<void>;
 };
 
@@ -20,34 +21,40 @@ export const userContext = createContext<UserContextType | undefined>(
   undefined
 );
 
-export const Userprovider = ({ children }: { children: React.ReactNode }) => {
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true); // <-- loading state
 
   const fetchUserData = async () => {
     try {
       const supabase = createClient();
       const {
-        data: { user },
+        data: { user: authUser },
         error: authError,
       } = await supabase.auth.getUser();
-      if (authError || !user) return;
 
-      const { data: Profile } = await supabase
+      if (authError || !authUser) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      const { data: profile, error: profileError } = await supabase
         .from("users")
         .select("*")
-        .eq("id", user.id)
+        .eq("id", authUser.id)
         .single();
-      setUser({
-        id: Profile.id,
-        username: Profile.name,
-        email: Profile.email,
-        role: Profile.role,
-        created_at: Profile.created_at,
-      });
-      return Profile;
+
+      if (profileError || !profile) {
+        setUser(null);
+      } else {
+        setUser(profile);
+      }
     } catch (error) {
       console.error("Unexpected error fetching user data:", error);
-      return null;
+      setUser(null);
+    } finally {
+      setLoading(false); // <-- done fetching
     }
   };
 
@@ -55,12 +62,11 @@ export const Userprovider = ({ children }: { children: React.ReactNode }) => {
     const fetchData = async () => {
       await fetchUserData();
     };
-
     fetchData();
   }, []);
 
   return (
-    <userContext.Provider value={{ user, setUser, fetchUserData }}>
+    <userContext.Provider value={{ user, setUser, fetchUserData, loading }}>
       {children}
     </userContext.Provider>
   );
