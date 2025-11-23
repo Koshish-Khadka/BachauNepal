@@ -1,47 +1,16 @@
 "use client";
 
-import { getAllDisasters } from "@/actions/disaster";
 import { ArrowLeft, ArrowRight, MapPin, Wind } from "lucide-react";
-import { useEffect, useState } from "react";
-type disasterDataType = {
-  id: string;
-  created_at: string;
-  title: string;
-  description: string;
-  startdata: string;
-  enddate: string | null;
-  location: string;
-  radius: number;
-  status: string;
-  created_by: string;
-  lat: number;
-  lng: number;
-};
+import { useState } from "react";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
+import { useDisaster } from "@/context/disasterContext";
 
 export default function Sidebar() {
-  const disaster = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [isOpen, setIsOpen] = useState(true);
-  const [disastersData, setDisastersData] = useState<disasterDataType[]>([]);
+  const { disasters, isDisasterShown, setIsDisasterShown } = useDisaster();
 
   const handleSidebarToggle = () => setIsOpen(!isOpen);
-
-  // Fetch Disaster data
-  useEffect(() => {
-    const fetchDisasters = async () => {
-      try {
-        const result = await getAllDisasters();
-        if (result.status === "success") {
-          // console.log("Disasters:", result.data);
-          setDisastersData(result.data || []);
-        } else {
-          console.log("Error fetching disasters:", result.message);
-        }
-      } catch (error) {
-        console.log("Failed to fetch Disasters", error);
-      }
-    };
-    fetchDisasters();
-  }, []);
 
   return (
     <div className="absolute top-0 left-0 z-[9999] flex items-start">
@@ -61,9 +30,17 @@ export default function Sidebar() {
                 Red markers indicate ongoing situations.
               </p>
             </div>
+            <div className="flex items-center space-x-2 space-y-2 mt-4">
+              <Switch
+                id="airplane-mode"
+                checked={isDisasterShown}
+                onCheckedChange={() => setIsDisasterShown(!isDisasterShown)}
+              />
+              <Label htmlFor="airplane-mode">Show Disaster on map</Label>
+            </div>
 
             <div>
-              {disastersData.map((item, index) => (
+              {disasters.map((item, index) => (
                 <div
                   key={index}
                   className="p-2 border border-gray-300 rounded-md mt-4"
