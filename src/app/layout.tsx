@@ -5,6 +5,8 @@ import "leaflet/dist/leaflet.css";
 import { Poppins } from "next/font/google";
 import { UserProvider, useUser } from "@/context/userContext";
 import React from "react";
+import { DisasterProvider } from "@/context/disasterContext";
+import { ResourceProvider } from "@/context/resourcesContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -39,7 +41,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
         <UserProvider>
-          <RootContent>{children}</RootContent>
+          <DisasterProvider>
+            <ResourceProvider>
+              <RootContent>{children}</RootContent>
+            </ResourceProvider>
+          </DisasterProvider>
         </UserProvider>
       </body>
     </html>

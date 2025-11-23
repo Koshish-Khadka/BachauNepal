@@ -126,3 +126,46 @@
     @apply bg-background text-foreground;
   }
 }
+
+.custom-cluster {
+  background: rgba(255, 0, 0, 0.8);
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  border: 3px solid white;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+  width: 40px;
+  height: 40px;
+}
+
+/* CENTER THE NUMBER */
+.cluster-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.custom-cluster2 {
+  background: #06668c;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  border: 3px solid white;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+  width: 40px;
+  height: 40px;
+}
+
+/* CENTER THE NUMBER */
+.cluster-icon2 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
