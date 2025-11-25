@@ -74,7 +74,7 @@ export const DisasterProvider = ({ children }: { children: ReactNode }) => {
         setIsOpenDescription,
         isOpen,
         setIsOpen,
-        apple,
+        
       }}
     >
       {children}
