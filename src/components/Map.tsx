@@ -7,17 +7,23 @@ import L from "leaflet";
 import { useEffect, useState } from "react";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import "../app/globals.css";
-import { useDisaster } from "@/context/disasterContext";
+import { Disaster, useDisaster } from "@/context/disasterContext";
 import { useResource } from "@/context/resourcesContext";
+import FlyToDisaster from "@/helper/FlyToDisaster";
 
 export default function Map() {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
     null
   );
 
-  const { disasters, isDisasterShown } = useDisaster();
-  const { resources, handleDisasterClick, selectDisaster, isResourceShown } =
-    useResource();
+  const {
+    disasters,
+    isDisasterShown,
+    setIsOpenDescription,
+    setSelectedDisaster,
+  } = useDisaster();
+  const { resources, isResourceShown } = useResource();
+
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -70,6 +76,11 @@ export default function Map() {
     }
   };
 
+  const handleDisasterClick = (item: Disaster) => {
+    setSelectedDisaster(item);
+    setIsOpenDescription(true);
+  };
+
   if (!location) {
     return <div>Loading map...</div>;
   }
@@ -81,10 +92,11 @@ export default function Map() {
           ? [Number(location.lat.toFixed(4)), Number(location.lng.toFixed(4))]
           : [27.7172, 85.324]
       }
-      zoom={16}
+      zoom={8}
       zoomControl={false}
       className="w-full h-screen"
     >
+      <FlyToDisaster />
       {/* <TileLayer
           attribution="&copy; OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -167,6 +179,7 @@ export default function Map() {
                 iconAnchor: [35, 78],
               })}
             >
+
               <Popup>{item.title}</Popup>
             </Marker>
           ))}
@@ -188,7 +201,7 @@ export default function Map() {
               key={index}
               position={[item.lat, item.lng]}
               eventHandlers={{
-                click: () => handleDisasterClick(item.id),
+                click: () => handleDisasterClick(item),
               }}
               icon={L.divIcon({
                 className: "custom-marker",
@@ -243,76 +256,9 @@ export default function Map() {
                 iconSize: [50, 58],
                 iconAnchor: [35, 78],
               })}
-            >
-              <Popup>{item.type}</Popup>
-            </Marker>
+            ></Marker>
           ))}
       </MarkerClusterGroup>
-
-      {/* Resources based on selected disaster */}
-
-      {selectDisaster &&
-        selectDisaster.map((item, index) => (
-          <Marker
-            key={index}
-            position={[item.lat, item.lng]}
-            icon={L.divIcon({
-              className: "custom-marker",
-              html: `<div class="marker-container2">
-                                <div class="content2">
-                                  <img src=${getResourceIcon(
-                                    item.type
-                                  )} alt="weather" class="icon2" />
-                                </div>
-                                <div class="marker-pointer2"></div>
-                              </div>
-                              <style>
-
-                                .marker-container2 {
-                                  position: relative;
-                                }
-                                
-                                .content2 {
-                                  background: #0988bb;
-                                  border-radius: 50%;
-                                  display:flex;
-                                  flex-direction:column;
-                                  padding: 4px;
-                                  display: flex;
-                                  align-items: center;
-                                  width: 35px; 
-                                  height: 35px;
-                                  border: 2px solid #06668c;
-                                }
-                                
-                                .icon2 {
-                                  width: 20px;
-                                  height: 20px;
-                                  object-fit: contain;
-                                }
-                                
-                                .marker-pointer2 {
-                                  position: absolute;
-                                  bottom: -8px;
-                                  left: 50%;
-                                  transform: translateX(-50%);
-                                  width: 0;
-                                  height: 0;
-                                  border-left: 8px solid transparent;
-                                  border-right: 8px solid transparent;
-                                  border-top: 8px solid #06668c;
-                                }
-                                
-                              
-                              </style>
-                            `,
-              iconSize: [50, 58],
-              iconAnchor: [35, 78],
-            })}
-          >
-            <Popup>{item.title}</Popup>
-          </Marker>
-        ))}
     </MapContainer>
   );
 }

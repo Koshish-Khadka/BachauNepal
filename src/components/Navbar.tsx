@@ -29,7 +29,7 @@ const Navbar = () => {
       <ul className="flex items-center gap-x-10 ">
         <li className="flex items-center gap-2 text-[16px] font-bold text-gray-700">
           <MapPin />
-          Bachau Nepal koshish don
+          Bachau Nepal
         </li>
         <li className="text-base text-gray-600">Map</li>
         <li className="text-base text-gray-600">Blogs</li>
