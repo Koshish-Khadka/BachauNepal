@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-type Disaster = {
+export type Disaster = {
   id: string;
   created_by: string;
   description: string;
@@ -29,13 +29,24 @@ type DisasterContextType = {
   setDisasters: React.Dispatch<React.SetStateAction<Disaster[]>>;
   isDisasterShown: boolean;
   setIsDisasterShown: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedDisaster: Disaster | null;
+  setSelectedDisaster: React.Dispatch<React.SetStateAction<Disaster | null>>;
+  isOpenDescription: boolean;
+  setIsOpenDescription: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const DisasterContext = createContext<DisasterContextType | null>(null);
 
 export const DisasterProvider = ({ children }: { children: ReactNode }) => {
   const [disasters, setDisasters] = useState<Disaster[]>([]);
-  const [isDisasterShown, setIsDisasterShown] = useState<boolean>(false);
+  const [isDisasterShown, setIsDisasterShown] = useState<boolean>(true);
+  const [selectedDisaster, setSelectedDisaster] = useState<Disaster | null>(
+    null
+  );
+  const [isOpen, setIsOpen] = useState(true);
+  const [isOpenDescription, setIsOpenDescription] = useState<boolean>(false);
 
   // Fetch Disaster Data
   useEffect(() => {
@@ -52,7 +63,19 @@ export const DisasterProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   return (
     <DisasterContext.Provider
-      value={{ disasters, setDisasters, isDisasterShown, setIsDisasterShown }}
+      value={{
+        disasters,
+        setDisasters,
+        isDisasterShown,
+        setIsDisasterShown,
+        selectedDisaster,
+        setSelectedDisaster,
+        isOpenDescription,
+        setIsOpenDescription,
+        isOpen,
+        setIsOpen,
+        
+      }}
     >
       {children}
     </DisasterContext.Provider>
