@@ -1,9 +1,9 @@
 "use client";
-import { Button } from "./ui/button";
+import { Button } from "../../../components/ui/button";
 import { X } from "lucide-react";
 import { useDisaster } from "@/context/disasterContext";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+import { Label } from "../../../components/ui/label";
+import { Input } from "../../../components/ui/input";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { useState } from "react";
 import L from "leaflet";
@@ -45,7 +45,6 @@ const AddDisaster = () => {
     try {
       const supabase = await createClient();
       let imageUrl: string | null = null;
-
       //  Insert disaster data WITHOUT image first
       const { data: insertedDisasters, error: insertError } = await supabase
         .from("disasters")
@@ -141,6 +140,8 @@ const AddDisaster = () => {
     iconSize: [32, 32],
     iconAnchor: [16, 32],
   });
+
+
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm overflow-y-auto z-50">
