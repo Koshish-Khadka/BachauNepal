@@ -21,3 +21,22 @@ export const getAllDisasters = async () => {
     throw error;
   }
 };
+
+export const deletesingleDisaster = async (disasterID: string) => {
+  try {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+      .from("disasters")
+      .delete()
+      .eq("id", disasterID);
+    if (error) {
+      return {
+        status: "error",
+        message: error.message,
+      };
+    }
+  } catch (error) {
+    throw error;
+  }
+};

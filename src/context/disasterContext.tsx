@@ -35,6 +35,8 @@ type DisasterContextType = {
   setIsOpenDescription: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  addDisaster: boolean;
+  setAddDisaster: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const DisasterContext = createContext<DisasterContextType | null>(null);
@@ -47,6 +49,7 @@ export const DisasterProvider = ({ children }: { children: ReactNode }) => {
   );
   const [isOpen, setIsOpen] = useState(true);
   const [isOpenDescription, setIsOpenDescription] = useState<boolean>(false);
+  const [addDisaster, setAddDisaster] = useState<boolean>(false);
 
   // Fetch Disaster Data
   useEffect(() => {
@@ -74,7 +77,8 @@ export const DisasterProvider = ({ children }: { children: ReactNode }) => {
         setIsOpenDescription,
         isOpen,
         setIsOpen,
-        
+        addDisaster,
+        setAddDisaster,
       }}
     >
       {children}

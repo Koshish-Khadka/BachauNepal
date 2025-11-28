@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { LoginUser } from "@/actions/auth";
 import { useUser } from "@/context/userContext";
+import { toast } from "sonner";
 
 const Signin = () => {
   const router = useRouter();
@@ -23,7 +24,8 @@ const Signin = () => {
       // Fetch full user data from your "users" table
       await fetchUserData();
       router.push("/");
-      alert("Login successful!");
+
+      toast.success("Login Successfull");
     } else {
       alert(result?.message || "Login failed. Please try again.");
     }

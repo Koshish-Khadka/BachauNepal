@@ -7,6 +7,7 @@ import { UserProvider, useUser } from "@/context/userContext";
 import React from "react";
 import { DisasterProvider } from "@/context/disasterContext";
 import { ResourceProvider } from "@/context/resourcesContext";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -43,7 +44,10 @@ export default function RootLayout({
         <UserProvider>
           <DisasterProvider>
             <ResourceProvider>
-              <RootContent>{children}</RootContent>
+              <RootContent>
+                {children}
+                <Toaster />
+              </RootContent>
             </ResourceProvider>
           </DisasterProvider>
         </UserProvider>

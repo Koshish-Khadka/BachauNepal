@@ -13,6 +13,8 @@ type ResourceContextType = {
   setResources: React.Dispatch<React.SetStateAction<resourceDataType[]>>;
   isResourceShown: boolean;
   setIsResourceShown: React.Dispatch<React.SetStateAction<boolean>>;
+  addResource: boolean;
+  setAddResource: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export type resourceDataType = {
   id: string;
@@ -32,7 +34,7 @@ export const ResourceContext = createContext<ResourceContextType | null>(null);
 export const ResourceProvider = ({ children }: { children: ReactNode }) => {
   const [resources, setResources] = useState<resourceDataType[]>([]);
   const [isResourceShown, setIsResourceShown] = useState<boolean>(true);
-
+  const [addResource, setAddResource] = useState<boolean>(false);
   // Fetch all resources
   useEffect(() => {
     const fetchResources = async () => {
@@ -58,6 +60,8 @@ export const ResourceProvider = ({ children }: { children: ReactNode }) => {
         setResources,
         isResourceShown,
         setIsResourceShown,
+        addResource,
+        setAddResource,
       }}
     >
       {children}

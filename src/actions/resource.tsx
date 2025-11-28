@@ -38,3 +38,22 @@ export const getResourcesByDisasterId = async (disasterId: string) => {
     throw error;
   }
 };
+
+export const deletesingleResouces = async (resourcesID: string) => {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("resources")
+      .select("*")
+      .eq("id", resourcesID);
+    if (error) {
+      return {
+        status: "error",
+        message: error.message,
+      };
+    }
+    return { status: "success", data };
+  } catch (error) {
+    throw error;
+  }
+};
